@@ -18,30 +18,31 @@ namespace Certify.UI.ViewModel
         private readonly Action<T> _execute = null;
         private readonly Predicate<T> _canExecute = null;
 
-        #endregion Fields
+		#endregion Fields
 
-        #region Constructors
+		#region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of <see cref="DelegateCommand{T}"/>.
-        /// </summary>
-        /// <param name="execute">Delegate to execute when Execute is called on the command.  This can be null to just hook up a CanExecute delegate.</param>
-        /// <remarks><seealso cref="CanExecute"/> will always return true.</remarks>
-        public RelayCommand(Action<T> execute)
-            : this(execute, null)
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of <see cref="DelegateCommand{T}"/>.
+		/// </summary>
+		/// <param name="execute">Delegate to execute when Execute is called on the command.  This can be null to just hook up a CanExecute delegate.</param>
+		/// <remarks><seealso cref="CanExecute"/> will always return true.</remarks>
+		public RelayCommand(Action<T> execute)
+			: this(execute, null)
+		{
+		}
 
-        /// <summary>
-        /// Creates a new command.
-        /// </summary>
-        /// <param name="execute">The execution logic.</param>
-        /// <param name="canExecute">The execution status logic.</param>
-        public RelayCommand(Action<T> execute, Predicate<T> canExecute)
-        {
-            _execute = execute ?? throw new ArgumentNullException("execute");
-            _canExecute = canExecute;
-        }
+		/// <summary>
+		/// Creates a new command.
+		/// </summary>
+		/// <param name="execute">The execution logic.</param>
+		/// <param name="canExecute">The execution status logic.</param>
+		public RelayCommand(Action<T> execute, Predicate<T> canExecute)
+		{
+			if(execute == null) throw new ArgumentNullException("execute");
+			_execute = execute;
+			_canExecute = canExecute;
+		}
 
         #endregion Constructors
 

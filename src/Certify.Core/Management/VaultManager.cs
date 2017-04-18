@@ -580,7 +580,44 @@ namespace Certify
 
         #region ACME Workflow Steps
 
-        public PendingAuthorization BeginRegistrationAndValidation(CertRequestConfig requestConfig, string identifierAlias, string challengeType = "http-01", string domain = null)
+		public PendingAuthorization BeginDNSRegistrationAndValidation(CertRequestConfig requestConfig, string identifierAlias, string challengeType = "dns-01", string domain = null)
+		{
+			if (GetIdentifier(identifierAlias) == null)
+			{
+				//if an identifier exists for the same dns in vault, remove it to avoid confusion
+				this.DeleteIdentifierByDNS(domain);
+
+				// ACME service requires international domain names in ascii mode
+				ACMESharpUtils.NewIdentifier(identifierAlias, idnMapping.GetAscii(domain));
+			}
+
+			var identifier = this.GetIdentifier(identifierAlias, reloadVaultConfig: true);
+
+			if (identifier.Authorization.IsPending())
+			{
+				bool ccrResultOK = false;
+
+				ACMESharpUtils.CompleteChallenge(identifier.Alias, challengeType, Handler: "msdns", Regenerate: true, Repeat: true, Force: true);
+
+				ccrResultOK = true;
+
+				//get challenge info
+				ReloadVaultConfig();
+				identifier = GetIdentifier(identifierAlias);
+				var challengeInfo = identifier.Challenges.FirstOrDefault(c => c.Value.Type == challengeType).Value;
+
+				//identifier challenege specification is now ready for use to prepare and answer for LetsEncrypt to check
+				return new PendingAuthorization() { Challenge = challengeInfo, Identifier = identifier, TempFilePath = "", ExtensionlessConfigCheckedOK = false };
+			}
+			else
+			{
+				//identifier is already valid (previously authorized)
+				return new PendingAuthorization() { Challenge = null, Identifier = identifier, TempFilePath = "", ExtensionlessConfigCheckedOK = false };
+			}
+		}
+
+
+		public PendingAuthorization BeginRegistrationAndValidation(CertRequestConfig requestConfig, string identifierAlias, string challengeType = "http-01", string domain = null)
         {
             //if no alternative domain specified, use the primary domains as the subject
             if (domain == null) domain = requestConfig.PrimaryDomain;
