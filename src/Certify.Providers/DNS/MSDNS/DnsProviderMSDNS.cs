@@ -47,14 +47,14 @@ namespace Certify.Providers.DNS.MSDNS
             }
             _domain = credentials.ContainsKey("domain") ? credentials["domain"] : null;
             _customPropagationDelay = parameters.ContainsKey("propagationdelay") ? Convert.ToInt32(parameters["propagationdelay"]) : (int?)null;
-            if (credentials.ContainsKey("protocol") && credentials["protocol"].ToLowerInvariant() == "winrm")
+            if (parameters.ContainsKey("protocol") && parameters["protocol"].ToLowerInvariant() == "winrm")
             {
                 _protocol = WindowsRemotingProtocol.WinRM;
             }
 
-            if (credentials.ContainsKey("authentication"))
+            if (parameters.ContainsKey("authentication"))
             {
-                switch (credentials["authentication"].ToLowerInvariant())
+                switch (parameters["authentication"].ToLowerInvariant())
                 {
                     case "basic":
                         _authMechanism = PasswordAuthenticationMechanism.Basic;
@@ -85,6 +85,12 @@ namespace Certify.Providers.DNS.MSDNS
         {
             get
             {
+                var authParam = new ProviderDropDownParameter { Key = "authentication", Name = "Authentication", IsRequired = false, IsCredential = false, Description = "Must be one of the following: Basic, CredSsp, Default, Digest, Kerberos, Negotiate, NtlmDomain", Value = "Default" };
+                authParam.Options.AddRange(new List<string> { "Basic", "CredSsp", "Default", "Digest", "Kerberos", "Negotiate", "NtlmDomain" });
+
+                var protocolParam = new ProviderDropDownParameter { Key = "protocol", Name = "Remote Management Protocol", IsRequired = true, IsCredential = false, Description = "Must be one of the following: DCOM, WinRM", Value = "DCOM" };
+                protocolParam.Options.AddRange(new List<string> { "DCOM", "WinRM" });
+
                 return new ProviderDefinition
                 {
                     Id = "DNS01.API.MSDNS",
@@ -98,8 +104,8 @@ namespace Certify.Providers.DNS.MSDNS
                         new ProviderStringParameter{ Key="username", Name="User Name", IsRequired=false, IsCredential = true },
                         new ProviderPasswordParameter{ Key="password", Name="Password", IsRequired = false, IsCredential = true},
                         new ProviderStringParameter{ Key="domain", Name="Domain", IsRequired = false, IsCredential = true},
-                        new ProviderStringParameter{ Key="authentication", Name="Authentication", IsRequired = false, IsCredential = true, Description="Must be one of the following: Basic, CredSsp, Default, Digest, Kerberos, Negotiate, NtlmDomain", Value="NtlmDomain" },
-						new ProviderDropdownParameter{ Key="protocol", Name="Remote Management Protocol", IsRequired = true, IsCredential = true, Description="Must be one of the following: DCOM, WinRM", Value="DCOM" },
+                        authParam,
+                        protocolParam,
                         new ProviderStringParameter{ Key="propagationdelay",Name="Propagation Delay Seconds (optional)", IsRequired=false, Value="60", IsCredential=false },
                     },
                     ChallengeType = Models.SupportedChallengeTypes.CHALLENGE_TYPE_DNS,
@@ -156,7 +162,7 @@ namespace Certify.Providers.DNS.MSDNS
             var zones = new List<DnsZone>();
             GetZones(session).ForEach(o => zones.Add(new DnsZone() { Name = o, ZoneId = o }));
             return zones;
-            }
+        }
 
         public async Task<bool> InitProvider(ILog log = null)
         {
@@ -197,9 +203,9 @@ namespace Certify.Providers.DNS.MSDNS
             {
                 case WindowsRemotingProtocol.DCOM:
                     options = new DComSessionOptions();
-            if (!string.IsNullOrEmpty(_username))
-            {
-                options.AddDestinationCredentials(new CimCredential(_authMechanism, _domain, _username, _password));
+                    if (!string.IsNullOrEmpty(_username))
+                    {
+                        options.AddDestinationCredentials(new CimCredential(_authMechanism, _domain, _username, _password));
                     }
                     break;
                 case WindowsRemotingProtocol.WinRM:

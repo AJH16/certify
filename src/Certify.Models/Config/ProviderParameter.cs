@@ -1,6 +1,6 @@
 ﻿namespace Certify.Models.Config
 {
-    public abstract class ProviderParameter
+    public class ProviderParameter
     {
         public string Key { get; set; }
         public string Name { get; set; }
