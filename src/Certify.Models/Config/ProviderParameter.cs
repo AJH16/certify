@@ -1,13 +1,13 @@
 ﻿namespace Certify.Models.Config
 {
-    public class ProviderParameter
+    public abstract class ProviderParameter
     {
         public string Key { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public bool IsPassword { get; set; }
+        public virtual bool IsPassword { get => false; }
         public bool IsRequired { get; set; }
-        public string Value { get; set; }
+        public virtual string Value { get; set; }
         public bool IsCredential { get; set; } = true;
     }
 }

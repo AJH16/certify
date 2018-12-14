@@ -139,6 +139,11 @@ namespace Certify.Providers.DNS.OVH
             _webClient.CachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
         }
 
+		public static List<string> GetAvailableEndpointsAsList()
+        {
+            return _endpoints.Keys.ToList();
+        }
+
         public static string GetAvailableEndpointsAsString()
         {
             return string.Join(", ", _endpoints.Keys);

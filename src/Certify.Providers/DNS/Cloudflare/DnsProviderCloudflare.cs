@@ -106,9 +106,9 @@ namespace Certify.Providers.DNS.Cloudflare
                     HelpUrl = "https://docs.certifytheweb.com/docs/dns-cloudflare.html",
                     PropagationDelaySeconds = 60,
                     ProviderParameters = new List<ProviderParameter>{
-                        new ProviderParameter{Key="emailaddress", Name="Email Address", IsRequired=true },
-                        new ProviderParameter{Key="authkey", Name="Auth Key", IsRequired=true },
-                        new ProviderParameter{ Key="zoneid",Name="DNS Zone Id", IsRequired=true, IsPassword=false, IsCredential=false }
+                        new ProviderStringParameter{Key="emailaddress", Name="Email Address", IsRequired=true },
+                        new ProviderPasswordParameter{Key="authkey", Name="Auth Key", IsRequired=true },
+                        new ProviderStringParameter{ Key="zoneid",Name="DNS Zone Id", IsRequired=true, IsCredential=false }
                      },
                     ChallengeType = Models.SupportedChallengeTypes.CHALLENGE_TYPE_DNS,
                     Config = "Provider=Certify.Providers.DNS.Cloudflare",

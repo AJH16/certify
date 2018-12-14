@@ -33,6 +33,15 @@ namespace Certify.Providers.DNS.OVH
         {
             get
             {
+                ProviderDropDownParameter applicationEndpointParameter = new ProviderDropDownParameter
+                {
+                    Key = ApplicationEndpointParamKey,
+                    Name = "Endpoint name of OVH API",
+                    IsRequired = false,
+                    Description = $"Should be one of the following : {OvhClient.GetAvailableEndpointsAsString()}"
+                };
+                applicationEndpointParameter.Options.AddRange(OvhClient.GetAvailableEndpointsAsList());
+
                 return new ProviderDefinition
                 {
                     Id = "DNS01.API.Ovh",
@@ -41,12 +50,11 @@ namespace Certify.Providers.DNS.OVH
                     HelpUrl = "http://docs.certifytheweb.com/docs/dns-ovh.html", // TODO !
                     PropagationDelaySeconds = 60,
                     ProviderParameters = new List<ProviderParameter>{
-                        new ProviderParameter{Key=ApplicationKeyParamKey, Name="Application Key", IsRequired=true },
-                        new ProviderParameter{Key=ApplicationSecretParamKey, Name="Application Secret", IsRequired=true },
-                        new ProviderParameter{Key=ApplicationEndpointParamKey, Name="Endpoint name of OVH API", IsRequired=false,
-                                              Description =$"Should be one of the following : {OvhClient.GetAvailableEndpointsAsString()}" },
-                        new ProviderParameter{Key=ConsumerKeyParamKey, Name="Consumer Key", IsRequired=true },
-                        new ProviderParameter{Key="zoneid", Name="DNS Zone Id", Description="Zone Id is the root domain name e.g. example.com", IsRequired=true, IsPassword=false, IsCredential=false }
+                        new ProviderStringParameter{Key=ApplicationKeyParamKey, Name="Application Key", IsRequired=true },
+                        new ProviderPasswordParameter{Key=ApplicationSecretParamKey, Name="Application Secret", IsRequired=true },
+                        applicationEndpointParameter,
+                        new ProviderStringParameter{Key=ConsumerKeyParamKey, Name="Consumer Key", IsRequired=true },
+                        new ProviderStringParameter{Key="zoneid", Name="DNS Zone Id", Description="Zone Id is the root domain name e.g. example.com", IsRequired=true, IsCredential=false }
                     },
                     ChallengeType = Certify.Models.SupportedChallengeTypes.CHALLENGE_TYPE_DNS,
                     Config = "Provider=Certify.Providers.DNS.Ovh",

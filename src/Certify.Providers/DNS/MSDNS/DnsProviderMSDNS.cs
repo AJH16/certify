@@ -93,14 +93,14 @@ namespace Certify.Providers.DNS.MSDNS
                     HelpUrl = "https://docs.microsoft.com/en-us/windows/desktop/dns/dns-wmi-classes",
                     PropagationDelaySeconds = 5,
                     ProviderParameters = new List<ProviderParameter>{
-                        new ProviderParameter{ Key="dnsservername", Name="Server Name", IsRequired=true, IsCredential=false, Value=Environment.MachineName },
-                        new ProviderParameter{ Key="ipaddress", Name="DNS Server IP Address", IsRequired=false, IsCredential=false},
-                        new ProviderParameter{ Key="username", Name="User Name", IsRequired=false, IsCredential = true, IsPassword = false },
-                        new ProviderParameter{ Key="password", Name="Password", IsRequired = false, IsCredential = true, IsPassword = true},
-                        new ProviderParameter{ Key="domain", Name="Domain", IsRequired = false, IsCredential = true, IsPassword = false},
-                        new ProviderParameter{ Key="protocol", Name="Remote Management Protocol", IsRequired = true, IsCredential = true, IsPassword = false, Description="Must be one of the following: DCOM, WinRM", Value="DCOM" },
-                        new ProviderParameter{ Key="authentication", Name="Authentication", IsRequired = true, IsCredential = true, IsPassword = false, Description="Must be one of the following: Basic, CredSsp, Default, Digest, Kerberos, Negotiate, NtlmDomain", Value="NtlmDomain" },
-                        new ProviderParameter{ Key="propagationdelay",Name="Propagation Delay Seconds (optional)", IsRequired=false, IsPassword=false, Value="60", IsCredential=false },
+                        new ProviderStringParameter{ Key="dnsservername", Name="Server Name", IsRequired=true, IsCredential=false, Value=Environment.MachineName },
+                        new ProviderStringParameter{ Key="ipaddress", Name="DNS Server IP Address", IsRequired=false, IsCredential=false},
+                        new ProviderStringParameter{ Key="username", Name="User Name", IsRequired=false, IsCredential = true },
+                        new ProviderPasswordParameter{ Key="password", Name="Password", IsRequired = false, IsCredential = true},
+                        new ProviderStringParameter{ Key="domain", Name="Domain", IsRequired = false, IsCredential = true},
+                        new ProviderStringParameter{ Key="authentication", Name="Authentication", IsRequired = false, IsCredential = true, Description="Must be one of the following: Basic, CredSsp, Default, Digest, Kerberos, Negotiate, NtlmDomain", Value="NtlmDomain" },
+						new ProviderDropdownParameter{ Key="protocol", Name="Remote Management Protocol", IsRequired = true, IsCredential = true, Description="Must be one of the following: DCOM, WinRM", Value="DCOM" },
+                        new ProviderStringParameter{ Key="propagationdelay",Name="Propagation Delay Seconds (optional)", IsRequired=false, Value="60", IsCredential=false },
                     },
                     ChallengeType = Models.SupportedChallengeTypes.CHALLENGE_TYPE_DNS,
                     Config = "Provider=Certify.Providers.DNS.MSDNS",
@@ -156,7 +156,7 @@ namespace Certify.Providers.DNS.MSDNS
             var zones = new List<DnsZone>();
             GetZones(session).ForEach(o => zones.Add(new DnsZone() { Name = o, ZoneId = o }));
             return zones;
-        }
+            }
 
         public async Task<bool> InitProvider(ILog log = null)
         {
@@ -197,9 +197,9 @@ namespace Certify.Providers.DNS.MSDNS
             {
                 case WindowsRemotingProtocol.DCOM:
                     options = new DComSessionOptions();
-                    if (!string.IsNullOrEmpty(_username))
-                    {
-                        options.AddDestinationCredentials(new CimCredential(_authMechanism, _domain, _username, _password));
+            if (!string.IsNullOrEmpty(_username))
+            {
+                options.AddDestinationCredentials(new CimCredential(_authMechanism, _domain, _username, _password));
                     }
                     break;
                 case WindowsRemotingProtocol.WinRM:

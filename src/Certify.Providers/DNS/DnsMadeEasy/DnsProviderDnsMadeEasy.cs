@@ -64,9 +64,9 @@ namespace Certify.Providers.DNS.DnsMadeEasy
                     HelpUrl = "http://docs.certifytheweb.com/docs/dns-dnsmadeeasy.html",
                     PropagationDelaySeconds = 60,
                     ProviderParameters = new List<ProviderParameter>{
-                        new ProviderParameter{Key="apikey", Name="API Key", IsRequired=true },
-                        new ProviderParameter{Key="apisecret", Name="API Secret", IsRequired=true },
-                        new ProviderParameter{ Key="zoneid",Name="DNS Zone Id", IsRequired=true, IsPassword=false, IsCredential=false }
+                        new ProviderStringParameter{Key="apikey", Name="API Key", IsRequired=true },
+                        new ProviderPasswordParameter{Key="apisecret", Name="API Secret", IsRequired=true },
+                        new ProviderStringParameter{ Key="zoneid",Name="DNS Zone Id", IsRequired=true, IsCredential=false }
                     },
                     ChallengeType = Models.SupportedChallengeTypes.CHALLENGE_TYPE_DNS,
                     Config = "Provider=Certify.Providers.DNS.DnsMadeEasy",

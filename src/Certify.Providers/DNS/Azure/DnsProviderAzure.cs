@@ -41,12 +41,12 @@ namespace Certify.Providers.DNS.Azure
                     HelpUrl = "http://docs.certifytheweb.com/docs/dns-azuredns.html",
                     PropagationDelaySeconds = 60,
                     ProviderParameters = new List<ProviderParameter>{
-                        new ProviderParameter{Key="tenantid", Name="Tenant Id", IsRequired=false },
-                        new ProviderParameter{Key="clientid", Name="Application Id", IsRequired=false },
-                        new ProviderParameter{Key="secret",Name="Svc Principal Secret", IsRequired=true , IsPassword=true},
-                        new ProviderParameter{Key="subscriptionid",Name="DNS Subscription Id", IsRequired=true , IsPassword=false},
-                        new ProviderParameter{Key="resourcegroupname",Name="Resource Group Name", IsRequired=true , IsPassword=false},
-                        new ProviderParameter{ Key="zoneid",Name="DNS Zone Name", IsRequired=true, IsPassword=false, IsCredential=false }
+                        new ProviderStringParameter{Key="tenantid", Name="Tenant Id", IsRequired=false },
+                        new ProviderStringParameter{Key="clientid", Name="Application Id", IsRequired=false },
+                        new ProviderPasswordParameter{Key="secret",Name="Svc Principal Secret", IsRequired=true},
+                        new ProviderStringParameter{Key="subscriptionid",Name="DNS Subscription Id", IsRequired=true},
+                        new ProviderStringParameter{Key="resourcegroupname",Name="Resource Group Name", IsRequired=true},
+                        new ProviderStringParameter{ Key="zoneid",Name="DNS Zone Name", IsRequired=true, IsCredential=false }
                     },
                     ChallengeType = Models.SupportedChallengeTypes.CHALLENGE_TYPE_DNS,
                     Config = "Provider=Certify.Providers.DNS.Azure",

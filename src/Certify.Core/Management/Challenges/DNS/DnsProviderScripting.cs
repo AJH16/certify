@@ -40,10 +40,10 @@ namespace Certify.Core.Management.Challenges.DNS
                     HelpUrl = "http://docs.certifytheweb.com/",
                     PropagationDelaySeconds = 60,
                     ProviderParameters = new List<ProviderParameter>{
-                        new ProviderParameter{ Key="createscriptpath", Name="Create Script Path", IsRequired=true , IsCredential=false},
-                        new ProviderParameter{ Key="deletescriptpath", Name="Delete Script Path", IsRequired=false, IsCredential=false },
-                        new ProviderParameter{ Key="propagationdelay",Name="Propagation Delay Seconds (optional)", IsRequired=false, IsPassword=false, Value="60", IsCredential=false },
-                        new ProviderParameter{ Key="zoneid",Name="Dns Zone Id (optional)", IsRequired=false, IsPassword=false, IsCredential=false }
+                        new ProviderStringParameter{ Key="createscriptpath", Name="Create Script Path", IsRequired=true , IsCredential=false},
+                        new ProviderStringParameter{ Key="deletescriptpath", Name="Delete Script Path", IsRequired=false, IsCredential=false },
+                        new ProviderStringParameter{ Key="propagationdelay",Name="Propagation Delay Seconds (optional)", IsRequired=false, Value="60", IsCredential=false },
+                        new ProviderStringParameter{ Key="zoneid",Name="Dns Zone Id (optional)", IsRequired=false, IsCredential=false }
                     },
                     ChallengeType = Models.SupportedChallengeTypes.CHALLENGE_TYPE_DNS,
                     Config = "Provider=Certify.Providers.DNS.Scripting",

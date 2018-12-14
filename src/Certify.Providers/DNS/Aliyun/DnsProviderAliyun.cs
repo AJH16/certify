@@ -45,26 +45,23 @@ namespace Certify.Providers.DNS.Aliyun
                     PropagationDelaySeconds = 120,
                     ProviderParameters = new List<ProviderParameter>
                     {
-                        new ProviderParameter
+                        new ProviderStringParameter
                         {
                             Key = "accesskeyid",
                             Name = "Access Key ID",
-                            IsRequired = true,
-                            IsPassword = false
+                            IsRequired = true
                         },
-                        new ProviderParameter
+                        new ProviderPasswordParameter
                         {
                             Key = "accesskeysecret",
                             Name = "Access Key Secret",
-                            IsRequired = true,
-                            IsPassword = true
+                            IsRequired = true
                         },
-                        new ProviderParameter
+                        new ProviderStringParameter
                         {
                             Key = "zoneid",
                             Name = "DNS Zone Id",
                             IsRequired = true,
-                            IsPassword = false,
                             IsCredential = false
                         }
                     },

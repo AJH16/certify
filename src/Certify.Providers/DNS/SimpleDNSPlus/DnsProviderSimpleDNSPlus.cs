@@ -71,10 +71,10 @@ namespace Certify.Providers.DNS.SimpleDNSPlus
                     HelpUrl = "https://simpledns.com/swagger-ui/",
                     PropagationDelaySeconds = 60,
                     ProviderParameters = new List<ProviderParameter>{
-                        new ProviderParameter{ Key="authserver", Name="Server IP", IsRequired=true },
-                        new ProviderParameter{ Key="authkey", Name="Auth Key", IsRequired=true },
-                        new ProviderParameter{ Key="authsecret", Name="Auth Secret", IsRequired=true },
-                        new ProviderParameter{ Key="zoneid", Name="DNS Zone Id", IsRequired=true, IsPassword=false, IsCredential=false }
+                        new ProviderStringParameter{ Key="authserver", Name="Server IP", IsRequired=true },
+                        new ProviderStringParameter{ Key="authkey", Name="Auth Key", IsRequired=true },
+                        new ProviderPasswordParameter{ Key="authsecret", Name="Auth Secret", IsRequired=true },
+                        new ProviderStringParameter{ Key="zoneid", Name="DNS Zone Id", IsRequired=true, IsCredential=false }
                     },
                     ChallengeType = Models.SupportedChallengeTypes.CHALLENGE_TYPE_DNS,
                     Config = "Provider=Certify.Providers.DNS.SimpleDNSPlus",
